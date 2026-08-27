@@ -1,0 +1,6 @@
+build/
+state/
+reports/
+secrets/
+.venv/
+__pycache__/

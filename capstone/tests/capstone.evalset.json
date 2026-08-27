@@ -1,0 +1,88 @@
+{
+  "eval_set_id": "capstone",
+  "name": "Capstone 委派三案例（知識／研究／資料）＋一個不該亂答的 edge case",
+  "eval_cases": [
+    {
+      "eval_id": "case1_wiki_delegation",
+      "session_input": { "app_name": "concierge", "user_id": "u1", "state": {} },
+      "conversation": [
+        {
+          "invocation_id": "c1-i1",
+          "user_content": { "role": "user", "parts": [{ "text": "我知識庫裡關於 A2A 的重點是什麼？" }] },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "transfer_to_agent", "args": { "agent_name": "wiki_agent" } },
+              { "name": "search_knowledge", "args": { "query": "A2A 的重點" } }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "根據知識庫：A2A 的 Agent Card 放在 /.well-known/agent-card.json，Task 有狀態機，跨框架委派用 SendMessage。（來源：notes/a2a.md）" }]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "case2_research_then_ingest",
+      "session_input": { "app_name": "concierge", "user_id": "u1", "state": {} },
+      "conversation": [
+        {
+          "invocation_id": "c2-i1",
+          "user_content": { "role": "user", "parts": [{ "text": "幫我研究 Cloud Run GPU 定價，然後存進知識庫" }] },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "transfer_to_agent", "args": { "agent_name": "research_agent" } },
+              { "name": "google_search", "args": { "queries": ["Cloud Run GPU pricing 2026"] } },
+              { "name": "transfer_to_agent", "args": { "agent_name": "wiki_agent" } },
+              { "name": "ingest_document", "args": { "url": "https://cloud.google.com/run/pricing", "topic": "gcp" } }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "已研究並存入知識庫：Cloud Run GPU 以秒計費，L4 在 us-central1 每 GPU-秒計價，scale-to-zero 時不計費。（來源：cloud.google.com/run/pricing）" }]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "case3_data_agent_sum",
+      "session_input": { "app_name": "concierge", "user_id": "u1", "state": {} },
+      "conversation": [
+        {
+          "invocation_id": "c3-i1",
+          "user_content": { "role": "user", "parts": [{ "text": "我這個月訂閱總共花多少錢？" }] },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "transfer_to_agent", "args": { "agent_name": "data_agent" } },
+              { "name": "monthly-subscription-total", "args": {} }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "目前生效的訂閱共 5 筆，每月合計 2309 元台幣。" }]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "case4_not_in_wiki_must_say_no",
+      "session_input": { "app_name": "concierge", "user_id": "u1", "state": {} },
+      "conversation": [
+        {
+          "invocation_id": "c4-i1",
+          "user_content": { "role": "user", "parts": [{ "text": "我知識庫裡關於量子退火排程的筆記寫了什麼？" }] },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "transfer_to_agent", "args": { "agent_name": "wiki_agent" } },
+              { "name": "search_knowledge", "args": { "query": "量子退火排程" } }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "知識庫裡沒有關於量子退火排程的內容。要我用 research_agent 去查並存起來嗎？" }]
+          }
+        }
+      ]
+    }
+  ]
+}

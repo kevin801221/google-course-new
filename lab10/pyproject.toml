@@ -1,0 +1,15 @@
+[project]
+name = "lab10"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    # a2a      = RemoteA2aAgent 需要的 a2a-sdk
+    # mcp      = McpToolset 需要的 mcp SDK
+    # toolbox  = ToolboxToolset 需要的 toolbox-adk（少這個容器一開機就 ImportError）
+    # db       = sqlalchemy（session 落 Postgres）
+    # gcp      = google-cloud-aiplatform[agent-engines]，adk deploy agent_engine 要
+    "google-adk[a2a,mcp,toolbox,db,gcp]>=2.7,<3",
+    # db extra 只給 sqlalchemy，async driver 要自己加：
+    # postgresql+asyncpg:// 少了它會噴 ModuleNotFoundError: No module named 'asyncpg'
+    "asyncpg>=0.30",
+]

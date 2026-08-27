@@ -1,0 +1,41 @@
+# ── uv 環境：一律用 `uv run` 重建，不進版控 ──────────────────────
+.venv/
+__pycache__/
+*.py[co]
+.pytest_cache/
+.ruff_cache/
+
+# ── 講師專用：這個 repo 學生看得到，劇透會殺掉課堂的啊哈時刻 ─────
+# AHA.md      = 56 條洞見 ＋ 每個 Lab 的演出腳本（把梗全寫出來了）
+# TEACHING.md = 兩天 run-sheet（含「這裡先不要說」的教學安排）
+AHA.md
+TEACHING.md
+
+# ── 課程講義原稿：public repo 不放 ────────────────────────────
+*.pptx.pdf
+
+# ── 憑證與機密：只留 .example / .sample 樣板 ──────────────────
+.env
+.env.local
+.gemini/.env
+*credentials*.json
+client_secret*.json
+token.json
+*.pem
+secrets/
+
+# ── 執行產物 ──────────────────────────────────────────────
+out-*.md
+agents.png
+state/
+build/
+reports/
+data/
+.build/
+.adk/
+concierge/requirements.txt
+dist/
+wheels/
+*.egg-info
+
+.DS_Store

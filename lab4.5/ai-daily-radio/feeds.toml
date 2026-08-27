@@ -1,0 +1,53 @@
+# AI 新聞來源。full_text=true 的是全文 feed —— 全文來源至少要佔一半，
+# 只有標題的 feed 餵進 Notebook 會生出很空的內容。
+# 版控這份檔案，換來源要走 review。
+
+[[feeds]]
+name = "arXiv cs.AI"
+url = "https://rss.arxiv.org/rss/cs.AI"
+full_text = false
+
+[[feeds]]
+name = "arXiv cs.CL"
+url = "https://rss.arxiv.org/rss/cs.CL"
+full_text = false
+
+[[feeds]]
+name = "Import AI"
+url = "https://importai.substack.com/feed"
+full_text = true
+
+[[feeds]]
+name = "Simon Willison"
+url = "https://simonwillison.net/atom/everything/"
+full_text = true
+
+[[feeds]]
+name = "MIT Tech Review AI"
+url = "https://www.technologyreview.com/topic/artificial-intelligence/feed/"
+full_text = true
+
+[[feeds]]
+name = "HF Daily Papers"
+url = "https://papers.takara.ai/api/feed"
+full_text = false
+
+[[feeds]]
+name = "Google DeepMind"
+url = "https://blog.google/technology/google-deepmind/rss/"
+full_text = false
+
+[[feeds]]
+name = "Google AI / The Keyword"
+url = "https://blog.google/technology/ai/rss/"
+full_text = false
+
+[[feeds]]
+name = "OpenAI News"
+url = "https://openai.com/news/rss.xml"
+full_text = false
+
+[[feeds]]
+name = "TechCrunch AI"
+url = "https://techcrunch.com/category/artificial-intelligence/feed/"
+full_text = false

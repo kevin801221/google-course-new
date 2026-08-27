@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 放到 ~/Library/LaunchAgents/tw.airadio.daily.plist，把 /Users/you 換成你的路徑。
+     launchd 不載入 shell 設定檔，uv／ffmpeg／nlm 一律寫絕對路徑或自己設 PATH。
+     載入：launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/tw.airadio.daily.plist -->
+<plist version="1.0"><dict>
+  <key>Label</key><string>tw.airadio.daily</string>
+  <key>ProgramArguments</key><array>
+    <string>/Users/you/.local/bin/uv</string>
+    <string>run</string><string>airadio</string><string>run</string><string>--resume</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/you/code/ai-daily-radio</string>
+  <key>EnvironmentVariables</key><dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/bin:/bin:/Users/you/.local/bin</string>
+  </dict>
+  <key>StartCalendarInterval</key><dict>
+    <key>Hour</key><integer>6</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key><string>/tmp/airadio.log</string>
+  <key>StandardErrorPath</key><string>/tmp/airadio.err</string>
+</dict></plist>

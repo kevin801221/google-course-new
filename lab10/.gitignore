@@ -1,0 +1,6 @@
+.build/
+.venv/
+concierge/.env
+# uv export 產出的部署產物，不是相依來源（相依來源是 pyproject.toml + uv.lock）
+concierge/requirements.txt
+__pycache__/

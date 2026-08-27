@@ -1,0 +1,20 @@
+{
+  "//": "貼進 ~/.gemini/config/mcp_config.json 的 mcpServers 裡。遠端欄位叫 serverUrl（不是 url），改完要 Refresh。",
+  "mcpServers": {
+    "personal-wiki-local": {
+      "command": "uv",
+      "args": ["run", "--directory", "/絕對路徑/Antigravity-teach/capstone", "wiki_mcp/server.py"],
+      "env": { "DATABASE_URL": "postgresql://postgres.xxx:PASSWORD@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres" },
+      "disabledTools": ["wiki_ingest"]
+    },
+    "personal-wiki-cloud": {
+      "//": "先 gcloud run services proxy wiki-mcp --region us-central1 --port=3001（proxy 幫你帶 ID token）",
+      "serverUrl": "http://localhost:3001/mcp"
+    },
+    "notebooklm": {
+      "//": "Lab 4 的 notebooklm-mcp：cookie 認證，只留在本機，不上雲",
+      "command": "npx",
+      "args": ["-y", "notebooklm-mcp"]
+    }
+  }
+}

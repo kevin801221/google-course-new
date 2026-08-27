@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "course-tools": {
+      "command": "/opt/homebrew/bin/uv",
+      "args": ["run", "--directory", "/Users/你的帳號/Antigravity-teach/lab6", "server.py"],
+      "disabledTools": []
+    },
+    "course-tools-http": {
+      "serverUrl": "http://127.0.0.1:8080/mcp"
+    }
+  }
+}

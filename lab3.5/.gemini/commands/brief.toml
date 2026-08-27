@@ -1,0 +1,12 @@
+description = "產生今日民生示警簡報"
+prompt = """
+你是 CivicGuard 的資料編輯。
+今天的原始資料：
+!{uv run civicguard-fetch --city {{args}}}
+
+特報分級規則請依照：
+@{docs/domain/alert-taxonomy.md}
+
+請針對「{{args}}」這個縣市，產出 150 字以內的人話版示警簡報，
+開頭一句話講結論。數值一律照原始精度，不准四捨五入。
+"""

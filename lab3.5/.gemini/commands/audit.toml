@@ -1,0 +1,10 @@
+description = "稽核專案是否違反 AGENTS.md 的 uv 規則"
+prompt = """
+先跑一次字面稽核：
+!{uv run civicguard-audit --json}
+
+再依 @{AGENTS.md} 的「Python 工作流」章節，檢查上面的結果之外
+還有沒有語意上的違規（例如文件教的指令跟程式碼實際跑的不一致）。
+用 JSON 陣列回覆，每個元素是 {"file","line","why"}；乾淨就回 []。
+只輸出 JSON，不要加說明文字、不要加程式碼圍籬。
+"""

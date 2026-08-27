@@ -1,0 +1,22 @@
+name: daily-civic-brief
+on:
+  schedule:
+    - cron: "0 22 * * *"   # UTC 22:00 = 台北 06:00
+  workflow_dispatch:
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: uv sync --frozen
+      - run: npm install -g @google/gemini-cli
+      - run: bash scripts/ci_audit.sh
+      - run: bash scripts/daily_brief.sh
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CWA_API_KEY:    ${{ secrets.CWA_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with: { name: brief, path: reports/ }

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "civicguard": {
+      "command": "uv",
+      "args": ["run", "civicguard-mcp"],
+      "env": { "CWA_API_KEY": "$CWA_API_KEY" }
+    }
+  }
+}

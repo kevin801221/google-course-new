@@ -1,0 +1,24 @@
+[project]
+name = "ai-daily-radio"
+version = "0.1.0"
+description = "每天自己出一集的 AI 日報電台（Lab 4.5）"
+requires-python = ">=3.13"
+dependencies = [
+    "feedparser>=6.0.11",
+    "httpx>=0.27",
+    "google-api-python-client>=2.140",
+    "google-auth>=2.33",
+    "google-auth-oauthlib>=1.2",
+]
+
+[project.scripts]
+airadio = "airadio:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# 專案名叫 ai-daily-radio、套件目錄叫 airadio，名字不一致時 hatchling 找不到要打包什麼，
+# 會噴 "Unable to determine which files to ship inside the wheel"。這一段就是告訴它。
+[tool.hatch.build.targets.wheel]
+packages = ["src/airadio"]

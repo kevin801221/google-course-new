@@ -1,0 +1,52 @@
+# MCP Toolbox for Databases v1.x 多文件格式（kind:）。舊教學是巢狀 sources:/tools:，別抄。
+# 這個檔案就是 API 契約：SQL 寫死在這裡，模型只能給參數。進 git、走 code review。
+# 啟動：export DB_PASSWORD='...' && ./toolbox --config tools.yaml
+---
+kind: source
+name: course-db
+type: postgres
+# Supabase Dashboard -> Connect -> Session pooler（5432）。不要用 6543 的 transaction pooler。
+host: aws-0-ap-northeast-1.pooler.supabase.com
+port: 5432
+database: postgres
+user: postgres.abcd1234          # ← 換成你的 project ref
+password: ${DB_PASSWORD}         # 由環境變數注入，密碼不進 git
+---
+kind: tool
+name: search-hotels-by-city
+type: postgres-sql
+source: course-db
+description: 依城市與每晚預算上限搜尋旅館，回傳名稱、價格、評分、標籤，依評分高到低排序。
+parameters:
+  - name: city
+    type: string
+    description: 城市英文名，如 Tokyo、Osaka、Kyoto、Sapporo、Taipei
+  - name: max_price
+    type: integer
+    description: 每晚台幣預算上限
+statement: |
+  SELECT name, price_twd, rating, tags FROM hotels
+  WHERE city = $1 AND price_twd <= $2
+  ORDER BY rating DESC LIMIT 10;
+---
+kind: tool
+name: get-price-stats
+type: postgres-sql
+source: course-db
+description: 回傳每個城市的旅館間數與房價統計（平均、最低、最高），不需要參數，一次給全部城市。
+parameters: []
+statement: |
+  SELECT city,
+         count(*)               AS hotel_count,
+         round(avg(price_twd))  AS avg_price,
+         min(price_twd)         AS min_price,
+         max(price_twd)         AS max_price
+  FROM hotels
+  GROUP BY city
+  ORDER BY avg_price;
+---
+kind: toolset
+name: hotel-tools
+tools:
+  - search-hotels-by-city
+  - get-price-stats

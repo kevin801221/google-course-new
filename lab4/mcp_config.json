@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "notebooklm": {
+      "command": "notebooklm-mcp",
+      "args": [],
+      "disabledTools": ["notebook_delete", "source_delete"]
+    }
+  }
+}

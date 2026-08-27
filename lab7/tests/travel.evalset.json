@@ -1,0 +1,89 @@
+{
+  "eval_set_id": "travel",
+  "name": "旅遊助理三案例（含預算超標 edge case）",
+  "eval_cases": [
+    {
+      "eval_id": "case1_budget_then_hotel",
+      "session_input": {
+        "app_name": "travel_planner",
+        "user_id": "u1",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "c1-i1",
+          "user_content": {
+            "role": "user",
+            "parts": [{ "text": "預算 3 萬，11 月去東京三天，有哪些旅館可以住？" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "set_budget", "args": { "total_twd": 30000 } },
+              { "name": "booking_agent", "args": { "request": "東京住三晚，找預算內的旅館" } },
+              { "name": "search_hotels", "args": { "city": "東京", "nights": 3, "max_price": 0 } }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "總預算 3 萬、三晚，每晚上限 10000 元。可選：上野膠囊旅館 2800/晚（共 8400）、淺草和風旅館 4200/晚（共 12600）、新宿商務飯店 6500/晚（共 19500）。銀座柏悅 18000/晚超出上限。" }]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "case2_weather_delegation",
+      "session_input": {
+        "app_name": "travel_planner",
+        "user_id": "u1",
+        "state": { "user:budget": 30000 }
+      },
+      "conversation": [
+        {
+          "invocation_id": "c2-i1",
+          "user_content": {
+            "role": "user",
+            "parts": [{ "text": "東京 11 月會下雨嗎？" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "weather_agent", "args": { "request": "查東京 11 月的天氣與降雨機率" } },
+              { "name": "get_weather", "args": { "lat": 35.68, "lon": 139.77 } }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "東京未來幾天的氣溫與降雨機率如上，建議帶折傘。" }]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "case3_budget_exceeded_edge",
+      "session_input": {
+        "app_name": "travel_planner",
+        "user_id": "u2",
+        "state": {}
+      },
+      "conversation": [
+        {
+          "invocation_id": "c3-i1",
+          "user_content": {
+            "role": "user",
+            "parts": [{ "text": "預算 6000 元，東京住三晚，幫我找旅館" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "set_budget", "args": { "total_twd": 6000 } },
+              { "name": "booking_agent", "args": { "request": "東京住三晚，預算 6000 元，找旅館" } },
+              { "name": "search_hotels", "args": { "city": "東京", "nights": 3, "max_price": 0 } }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "6000 元分三晚，每晚只有 2000 元，東京沒有這個價位的房間。最便宜的上野膠囊旅館 2800 元/晚，三晚共 8400 元，已超出預算。請提高預算到 8400 元以上，或改成住兩晚。" }]
+          }
+        }
+      ]
+    }
+  ]
+}

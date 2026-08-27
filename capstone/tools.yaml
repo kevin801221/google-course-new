@@ -1,0 +1,81 @@
+# MCP Toolbox for Databases v1.x 多文件格式（kind:）。舊教學的巢狀 sources:/tools: 別抄。
+# 這個檔案就是 data_agent 的 API 契約：SQL 寫死在這裡，模型只能給參數 —— prompt injection 也改不了 SQL。
+# 本機啟動：export DB_PASSWORD='...' && ./toolbox --config tools.yaml --port 5000
+# 驗證：curl -s localhost:5000/api/toolset/personal-data | uv run python -m json.tool
+---
+kind: source
+name: personal-db
+type: postgres
+# Supabase Dashboard -> Connect -> Session pooler（5432）。6543 的 transaction pooler 不要用。
+host: aws-0-ap-northeast-1.pooler.supabase.com
+port: 5432
+database: postgres
+user: postgres.abcd1234          # ← 換成你的 project ref
+password: ${DB_PASSWORD}         # 環境變數注入；上雲改吃 Secret Manager
+---
+kind: tool
+name: list-subscriptions
+type: postgres-sql
+source: personal-db
+description: 列出目前生效的訂閱服務：名稱、月費（台幣）、分類、下次續訂日，依月費由高到低。不需要參數。
+parameters: []
+statement: |
+  SELECT name, monthly_twd, category, renews_on FROM subscriptions
+  WHERE active ORDER BY monthly_twd DESC;
+---
+kind: tool
+name: monthly-subscription-total
+type: postgres-sql
+source: personal-db
+description: 回傳目前生效訂閱的每月總花費（台幣）與筆數。問「這個月訂閱花多少」就用這個，不要自己加總。
+parameters: []
+statement: |
+  SELECT count(*) AS items, coalesce(sum(monthly_twd), 0) AS monthly_total_twd
+  FROM subscriptions WHERE active;
+---
+kind: tool
+name: search-notes
+type: postgres-sql
+source: personal-db
+description: 用關鍵字搜尋個人筆記的標題與內容（不分大小寫），回傳標題、內容、標籤、建立時間。
+parameters:
+  - name: keyword
+    type: string
+    description: 要搜尋的關鍵字，例如 A2A、Cloud Run、pgvector
+statement: |
+  SELECT title, body, tags, created_at FROM notes
+  WHERE title ILIKE '%' || $1 || '%' OR body ILIKE '%' || $1 || '%'
+  ORDER BY created_at DESC LIMIT 10;
+---
+kind: tool
+name: add-note
+type: postgres-sql
+source: personal-db
+description: 新增一筆個人筆記。只有使用者明確要求「記下來」時才用。標題重複會被忽略不會覆蓋。
+parameters:
+  - name: title
+    type: string
+    description: 筆記標題，會當成唯一鍵
+  - name: body
+    type: string
+    description: 筆記內容
+statement: |
+  INSERT INTO notes (title, body) VALUES ($1, $2)
+  ON CONFLICT ON CONSTRAINT notes_title_key DO NOTHING
+  RETURNING id, title;
+---
+# 權限矩陣（投影片 441）：讀的工具給所有 agent，寫的工具只掛在 concierge 的 SA 能呼叫的 toolset 裡。
+kind: toolset
+name: personal-data
+tools:
+  - list-subscriptions
+  - monthly-subscription-total
+  - search-notes
+  - add-note
+---
+kind: toolset
+name: personal-data-readonly    # 給外部 host／同事的 agent 用：只有讀
+tools:
+  - list-subscriptions
+  - monthly-subscription-total
+  - search-notes

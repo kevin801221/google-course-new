@@ -1,0 +1,31 @@
+[project]
+name = "civicguard"
+version = "0.1.0"
+description = "民生示警守護站：把政府開放資料轉成人話示警"
+readme = "README.md"
+authors = [
+    { name = "engineer01-ship-it", email = "engineer01@awesomeart.tw" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "google-genai>=2.20.0",
+    "httpx>=0.28.1",
+    "mcp[cli]>=2.1.1",
+]
+
+[project.scripts]
+civicguard-mcp = "civicguard.mcp_server:main"
+civicguard-audit = "civicguard.audit:main"
+civicguard-brief = "civicguard.brief:main"
+civicguard-fetch = "civicguard.cwa:main"
+civicguard-shelters = "civicguard.shelters:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.4",
+]

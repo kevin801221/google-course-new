@@ -1,0 +1,22 @@
+{
+  "context": {
+    "fileName": ["AGENTS.md", "GEMINI.md"]
+  },
+  "general": {
+    "defaultApprovalMode": "default",
+    "checkpointing": { "enabled": true }
+  },
+  "experimental": {
+    "autoMemory": true
+  },
+  "mcpServers": {
+    "civicguard": {
+      "command": "uv",
+      "args": ["run", "civicguard-mcp"],
+      "cwd": "./",
+      "env": { "CWA_API_KEY": "$CWA_API_KEY" },
+      "timeout": 30000,
+      "trust": false
+    }
+  }
+}
