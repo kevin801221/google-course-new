@@ -66,7 +66,7 @@ curl https://sdk.cloud.google.com | bash && exec -l $SHELL
 然後**在花任何錢之前**，先在本機把整套邏輯跑一遍。這一段完全不連網、不需要 GCP 帳號、不需要信用卡：
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab5
+cd $COURSE/lab5
 
 ./setup.sh --self-check
 ./verify.sh --self-check
@@ -637,7 +637,7 @@ $ [ "$(gcloud secrets versions access latest --secret=gemini-api-key)" = "$GEMIN
 > 💡 **啊哈：同一把 key 在這門課搬了三次家，每搬一次就少一個外洩管道 —— 你現在站在第三站。**
 > ①環境變數：`lab1/ask.py:67` 的 `genai.Client()` 直接讀 `GEMINI_API_KEY`，key 的明文在你的 shell、你的 `.env`、你的 history 裡。②ADC（步驟 4）：金鑰根本不在你手上，換成一張可撤銷的授權。③Secret Manager（現在）：值有 IAM、有版本、有 audit log。
 > 這條路的終點在 M10：你剛手打的 `secrets create ... || versions add` 在部署腳本裡是同一組指令，只是換成 DB 密碼。
-> **動手看**：`grep -n "secrets create\|set-secrets" /Users/awesomeartengineer01/Antigravity-teach/lab10/deploy.sh` → 第 78 行是你剛打的那組 create／versions add，第 97 行 `--set-secrets "DB_PASSWORD=…:latest"` 就是把它掛進 Cloud Run 的那一行。
+> **動手看**：`grep -n "secrets create\|set-secrets" $COURSE/lab10/deploy.sh` → 第 78 行是你剛打的那組 create／versions add，第 97 行 `--set-secrets "DB_PASSWORD=…:latest"` 就是把它掛進 Cloud Run 的那一行。
 
 > ⚠️ 未實測：Secret Manager 的三個指令都需要真帳號。`ALREADY_EXISTS: Secret [...] already exists.` 的原文抄自 GCP 慣用格式。最後那個字串比對是**你自己跑得出結果**的驗收方式——它不依賴任何訊息格式，只比值相不相等。
 
@@ -784,7 +784,7 @@ echo "失敗項數：$?"
 投影片 p.243 第 5 點：Lab 專案整個刪除最乾淨——資源全部一起消失，不會有「忘記刪的 Cloud SQL 實例每月扣你錢」這種事。
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab5
+cd $COURSE/lab5
 ./teardown.sh --dry-run      # 先看它要刪什麼
 ./teardown.sh                # 會要你打字輸入專案 ID 確認
 ```

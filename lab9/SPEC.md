@@ -216,7 +216,7 @@ ADK 會自動讀 agent 目錄下的 `.env`（`hotel_service/.env`、`concierge/.
 
 ```bash
 # ── 一次性 ──────────────────────────────────────────
-cd /Users/awesomeartengineer01/Antigravity-teach/lab9      # 或你自己的路徑
+cd $COURSE/lab9      # 或你自己的路徑
 uv init --bare --name lab9 --python 3.13                   # 已經有 pyproject.toml 就跳過
 uv add "google-adk[a2a]" "a2a-sdk[http-server]"
 cp hotel_service/.env.example hotel_service/.env && $EDITOR hotel_service/.env

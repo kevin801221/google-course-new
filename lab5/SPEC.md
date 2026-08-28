@@ -228,7 +228,7 @@ lab5/
 從零到驗收，全部在 `lab5/` 目錄下：
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab5
+cd $COURSE/lab5
 
 # ── 階段 A：離線（不需要 GCP 帳號）─────────────────────────────
 ./setup.sh --self-check           # 驗設置腳本邏輯（用假 gcloud）

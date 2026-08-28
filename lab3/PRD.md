@@ -57,7 +57,7 @@ Lab 2 用 AI Studio Build「vibe coding」生出一個能跑的 app，但它是�
 
 ```bash
 cd /path/to/你的專案
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .
+uv run $COURSE/lab3/check_lab3.py .
 ```
 
 預期最後一行是 `11 過 / 0 失敗`、exit code 0。（`11` 是只有一份 rule 檔的情況，每多一份 `.agents/rules/*.md` 多 4 項；判準是 `0 失敗`。）

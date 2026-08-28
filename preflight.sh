@@ -32,6 +32,11 @@ printf "\n"; echo "${B}Day 1 必要${N}（缺了 Lab 1 就開不了）"
 if need uv; then row ok uv "$(uv --version)"
 else row bad uv "找不到 —— 全課唯一的 Python 工作流" "curl -LsSf https://astral.sh/uv/install.sh | sh"; day1_fail=1; fi
 
+here=$(cd "$(dirname "$0")" && pwd)
+if [ "${COURSE:-}" = "$here" ]; then row ok COURSE "$COURSE"
+elif [ -n "${COURSE:-}" ]; then row warn COURSE "指到別的地方：$COURSE" "export COURSE=$here"
+else row warn COURSE "沒設 —— Lab 3 之後的跨目錄指令會找不到教材" "export COURSE=$here   # 建議寫進 ~/.zshrc"; fi
+
 if need git; then row ok git "$(git --version | cut -d' ' -f3)"
 else row warn git "找不到（拉教材用）" "xcode-select --install  # macOS"; fi
 

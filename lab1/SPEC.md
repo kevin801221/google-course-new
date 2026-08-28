@@ -195,7 +195,7 @@ uv run ask.py --json "2026 年 Gemini 3 系列有哪些型號？" | uv run pytho
 ### 離線（不需要 key、不花錢，我實際跑過）
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab1
+cd $COURSE/lab1
 uv run ask.py --self-check
 ```
 
@@ -215,7 +215,7 @@ uv run ask.py --self-check
 事件與欄位不是憑印象寫的，可自己複查：
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab1
+cd $COURSE/lab1
 grep -rhoE '^ *event_type: Literal\["[a-z_.]+"\]' "$(uv run python -c 'import google.genai,os;print(os.path.dirname(google.genai.__file__))')"/_gaos/types/interactions/ | sort -u
 ```
 

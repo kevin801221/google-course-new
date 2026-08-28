@@ -59,7 +59,7 @@ LLM 的訓練資料有截止日，問它「2026 年最新的 Gemini 模型是哪
 對應投影片第 56 頁步驟 6「問三個 2026 年的時事問題，答案須帶正確來源連結」。
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab1
+cd $COURSE/lab1
 
 # 0) 離線檢查（不需要 key，這條一定要先過）
 uv run ask.py --self-check
@@ -110,7 +110,7 @@ uv run ask.py --json "2026 年 Gemini 3 系列有哪些型號？" | uv run pytho
 ```bash
 unset GEMINI_API_KEY                      # 清掉當前 shell 的 key
 # 不再用這把 key → aistudio.google.com/apikey 頁面上 Delete
-rm -rf /Users/awesomeartengineer01/Antigravity-teach/lab1/.venv   # 只是本機環境，隨時 uv run 會重建
+rm -rf $COURSE/lab1/.venv   # 只是本機環境，隨時 uv run 會重建
 ```
 
 ## 9. 前置依賴

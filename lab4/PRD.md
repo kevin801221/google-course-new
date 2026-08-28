@@ -64,7 +64,7 @@ Antigravity 的 agent 很懂程式碼，但完全不懂「你團隊的決策脈�
 可執行的驗收指令：
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab4
+cd $COURSE/lab4
 uv run wiki.py --self-check                       # 離線邏輯
 uv run wiki.py check                              # 檢查全域 mcp_config.json
 export NLM_NOTEBOOK_ID=<你的筆記本 id>

@@ -233,8 +233,8 @@ npm ci && npm run dev                        # 確認 app 本來就跑得起來�
 # Antigravity → 左欄「+」→ New Project → 選這個資料夾
 
 # ── 2. 建立規範檔 ──────────────────────────────────────────
-cp -R /Users/awesomeartengineer01/Antigravity-teach/lab3/templates/. .
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .   # 預期：rules/mcp 綠，證據與 git 紅
+cp -R $COURSE/lab3/templates/. .
+uv run $COURSE/lab3/check_lab3.py .   # 預期：rules/mcp 綠，證據與 git 紅
 
 # ── 3-5. 派任務、審 Plan、看 browser 驗證（在 Antigravity UI 裡） ──
 # /grill-me → 回答反問 → 審 Plan → 留言 → Proceed → 看 Walkthrough 錄影
@@ -249,7 +249,7 @@ uv run python -m json.tool .agents/mcp_config.json > /dev/null && echo "JSON ok"
 
 # ── 7. 驗收 ────────────────────────────────────────────────
 npm run lint && npx tsc --noEmit
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .   # 預期 11 過 / 0 失敗
+uv run $COURSE/lab3/check_lab3.py .   # 預期 11 過 / 0 失敗
 ```
 
 ## 8. 錯誤處理與邊界

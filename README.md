@@ -15,8 +15,15 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 #    https://aistudio.google.com/apikey
 export GEMINI_API_KEY="..."
 
-# 3) 進任一 lab 目錄，一律用 uv run
+# 3) $COURSE：教材根目錄。Lab 3 之後有些指令會從「你自己的專案」呼叫回教材，
+#    所以先固定一個變數（建議也寫進 ~/.zshrc）
+cd <你 clone 的位置>/google-course-new && export COURSE=$(pwd)
+
+# 4) 進任一 lab 目錄，一律用 uv run
 cd lab1 && uv run ask.py "2026 年最新的 Gemini 模型是哪個？"
+
+# 5) 隨時可以檢查環境（Day 1／Day 2 分層，紅字＝現在開不了）
+$COURSE/preflight.sh
 ```
 
 > **不要用 `python ask.py`／`pip install`。** 全課一律 `uv run <script>`、`uv add <package>`、`uv tool install <cli>`。`uv run` 會自己讀 `pyproject.toml` 建好環境；直接 `python xxx.py` 會用到系統 Python、找不到套件，錯誤訊息還會很難懂。

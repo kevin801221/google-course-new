@@ -139,9 +139,14 @@ def report(res, need_cite=True):
 # ---------- 會連網的部分 ----------
 
 def run_nlm(*args):
-    if not shutil.which("nlm"):
-        sys.exit("找不到 nlm：uv tool install notebooklm-mcp-cli && uv tool update-shell")
-    return subprocess.run(["nlm", *args], capture_output=True, text=True)
+    nlm_cmd = shutil.which("nlm")
+    if not nlm_cmd:
+        local_nlm = Path.home() / ".local" / "bin" / "nlm"
+        if local_nlm.exists():
+            nlm_cmd = str(local_nlm)
+        else:
+            sys.exit("找不到 nlm：uv tool install notebooklm-mcp-cli && uv tool update-shell")
+    return subprocess.run([nlm_cmd, *args], capture_output=True, text=True)
 
 
 def notebook_id(argv):
@@ -314,10 +319,17 @@ def main(argv):
         sys.exit(code)
 
     if cmd == "ask":
-        q = " ".join(a for a in argv[1:] if a != "--nb" and a != notebook_id(argv))
-        if not q.strip():
+        nb = notebook_id(argv)
+        args = list(argv[1:])
+        if "--nb" in args:
+            idx = args.index("--nb")
+            if idx + 1 < len(args):
+                args.pop(idx + 1)
+            args.pop(idx)
+        q = " ".join(args).strip()
+        if not q:
             sys.exit('用法：uv run wiki.py ask "你的問題"')
-        code, msg = report(run_nlm("query", notebook_id(argv), q))
+        code, msg = report(run_nlm("query", "notebook", nb, q))
         print(msg)
         for u in citations(msg):
             print(f"  來源 {u}")

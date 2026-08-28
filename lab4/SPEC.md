@@ -176,7 +176,7 @@ lab4/
 
 ```bash
 # ── 0. 專案（本目錄已經 init 好，重建才需要）
-cd /Users/awesomeartengineer01/Antigravity-teach/lab4
+cd $COURSE/lab4
 uv init --bare --name lab4          # 只有重建時才跑
 uv run wiki.py --self-check         # → self-check 全過
 

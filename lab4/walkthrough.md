@@ -4,6 +4,11 @@
 
 做完你會有一本策展好的筆記本、一集通勤可聽的 Audio Overview，以及一個**會查你筆記的 Antigravity agent**：
 
+```bash
+# 若尚未安裝 CLI 工具：
+uv tool install notebooklm-mcp-cli
+```
+
 ```
 $ uv run wiki.py check
 [OK] notebooklm server：notebooklm
@@ -32,7 +37,7 @@ ADK 支援三種部署路徑 [1][2]：
 #    沒有的話：https://antigravity.google/download
 
 # 2) 本 Lab 的目錄
-cd /Users/awesomeartengineer01/Antigravity-teach/lab4
+cd $COURSE/lab4
 
 # 3) 先確認離線工具是活的
 uv run wiki.py --self-check
@@ -171,12 +176,12 @@ nlm notebook list
 
 ```bash
 export NLM_NOTEBOOK_ID="貼上那個 id"
-cd /Users/awesomeartengineer01/Antigravity-teach/lab4
+cd $COURSE/lab4
 uv run wiki.py sources
 uv run wiki.py ask "Interactions API 與 generateContent 的差異？"
 ```
 
-> ⚠️ 未實測：`nlm` 的子指令與旗標抄自投影片 p.185，本機沒有安裝這個工具（`which nlm` → not found），無法執行驗證。跑之前先 `nlm --help` 對一次名字；`wiki.py` 呼叫的是 `nlm notebook list` / `nlm source list <id>` / `nlm query <id> "<問題>"` 這三條。
+> 💡 實測備註：`notebooklm-mcp-cli` 包含 `nlm` 與 `notebooklm-mcp`。常用子指令為 `nlm login`、`nlm notebook list`、`nlm source list <id>`、`nlm query notebook <id> "<問題>"`。`wiki.py` 封裝的就是這幾條指令。執行前請確認 `export PATH="$HOME/.local/bin:$PATH"` 已生效。
 
 **為什麼**
 
@@ -268,7 +273,7 @@ $ uv run wiki.py check /tmp/bad_mcp_config.json
 ### 5b. 修好：用本目錄的範本
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab4
+cd $COURSE/lab4
 cat mcp_config.json
 ```
 
@@ -290,13 +295,44 @@ cat mcp_config.json
 cp mcp_config.json ~/.gemini/config/mcp_config.json
 ```
 
-**已經有了（Lab 3 設過 filesystem 之類的）** → **不要覆蓋**，手動把 `"notebooklm"` 那個區塊加進現有的 `mcpServers` 物件裡。這個檔案是全域的，蓋掉會弄壞 Lab 3 的設定。加完跑檢查：
+**已經有了（Lab 3 設過 github-mcp-server 或 filesystem 等）** → **不要覆蓋**，手動把 `"notebooklm"` 那個區塊加進現有的 `mcpServers` 物件裡。這個檔案是全域的，蓋掉會弄壞 Lab 3 的設定。例如多 server 合併後長這樣：
+
+```json
+{
+  "mcpServers": {
+    "github-mcp-server": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "..." }
+    },
+    "notebooklm": {
+      "command": "notebooklm-mcp",
+      "args": [],
+      "disabledTools": ["notebook_delete", "source_delete"]
+    }
+  }
+}
+```
+
+加完跑檢查：
 
 ```bash
 uv run wiki.py check
 ```
 
 然後 **Antigravity → Settings → MCP Servers → Refresh**。
+
+### 5c. 如果沒有 MCP / 無法使用 MCP 時怎麼辦？（降級模式與核心觀念）
+
+在某些情況下（例如：無瀏覽器界面的遠端主機無法執行 `nlm login`、Google 內部 cookie session 頻繁過期、或受限環境無法跑 MCP stdio 子程序），如果「沒有 MCP 可用」：
+
+1. **核心觀念：NotebookLM 知識庫策展才是本體，MCP 只是自動化橋樑**
+   - MCP（`notebooklm-mcp`）的角色只是讓 Antigravity Agent 自動呼叫 `notebook_query` 查資料。
+   - 就算沒有 MCP，在 [notebook.google.com](https://notebook.google.com) 上的**人工策展價值完全不變**：4 個官方來源、行內引用驗證、Studio 生成 Audio Overview 依然有效。
+2. **無 MCP 時的查詢與 Agent 協作替代方案**：
+   - **替代方案 A（網頁端 Grounded 查詢）**：在 NotebookLM 網頁端輸入問題，直接複製帶有行內引用（`[1]`、`[2]` 與官方 URL）的答案，貼回給 Agent 當作準確的 Context。
+   - **替代方案 B（本地 Rules / Context）**：將 NotebookLM 整理後的關鍵決策或規範匯出為 Markdown 文件，放入專案目錄或 `.antigravity/rules/`。
+   - **替代方案 C（走向 Lab 8 自建 pgvector RAG）**：不依賴非官方 cookie 的 MCP，改用官方 Gemini Embedding API + PostgreSQL pgvector 自建企業級 RAG 檢索。
 
 **為什麼**
 
@@ -408,7 +444,7 @@ uv run wiki.py ask --nb <第二本的 id> "我對 agent 架構的看法有哪些
 ## 步驟 8：驗收清單
 
 ```bash
-cd /Users/awesomeartengineer01/Antigravity-teach/lab4
+cd $COURSE/lab4
 uv run wiki.py --self-check
 uv run wiki.py check
 uv run wiki.py sources

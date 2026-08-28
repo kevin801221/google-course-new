@@ -164,7 +164,7 @@ grep -rn "any" src/utils/ ; npx tsc --noEmit
 
 ```bash
 cd 你的專案
-cp -R /Users/awesomeartengineer01/Antigravity-teach/lab3/templates/. .
+cp -R $COURSE/lab3/templates/. .
 ls -a .agents/rules/            # → style.md
 ```
 
@@ -203,7 +203,7 @@ ls -a .agents/rules/            # → style.md
 **驗收**
 
 ```bash
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .
+uv run $COURSE/lab3/check_lab3.py .
 ```
 
 前 6 項要 PASS：
@@ -231,7 +231,7 @@ head -3 src/utils/formatTime.ts           # → 註解變成繁體中文
 
 > 💡 **啊哈：決定 agent 產出品質的不是你 prompt 打多長，是你 repo 裡放了什麼**
 > 2a 與 2b 你打進對話框的字幾乎一樣多，結果天差地遠。多出來的一千多個字元不在對話框裡，在檔案裡 —— 而且它每次任務都自動掛上，你一輩子不用再打第二遍。prompt 是一次性的，repo 規範是常駐的；「prompt engineering」在 agent 時代大半其實是「repo engineering」。
-> **動手看**：`uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py --aha` → 51 字元 vs 1,475 字元（**29×**）、硬性約束 **0 → 17** 條、「完成」的定義從「沒寫」變成 `npm run lint ＋ npx tsc --noEmit`。（給路徑就換算你自己的專案：`--aha .`）
+> **動手看**：`uv run $COURSE/lab3/check_lab3.py --aha` → 51 字元 vs 1,475 字元（**29×**）、硬性約束 **0 → 17** 條、「完成」的定義從「沒寫」變成 `npm run lint ＋ npx tsc --noEmit`。（給路徑就換算你自己的專案：`--aha .`）
 
 ---
 
@@ -310,7 +310,7 @@ ls -la docs/evidence/
 **驗收**
 
 ```bash
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .
+uv run $COURSE/lab3/check_lab3.py .
 # → PASS  docs/evidence/ 有 browser 驗證證據：history-favorite.webm
 ```
 
@@ -364,7 +364,7 @@ FAIL  github.headers.Authorization：疑似明文 token，改成 $ENV_VAR 引用
 **驗收**
 
 ```bash
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .
+uv run $COURSE/lab3/check_lab3.py .
 ```
 
 要看到上面那兩條 FAIL（此時是 `7 過 / 5 失敗`），並且在 Installed MCP Servers（或 `agy` 的 `/mcp`）裡看到 github 的**工具清單是空的**。這就是這一步要你親眼看到的東西：設定檔語法完全合法、UI 不報錯、功能靜靜地沒有。
@@ -453,9 +453,9 @@ gh repo view --web         # 有 gh CLI 的話，直接開瀏覽器看
 repo 頁面上要**看不到** `node_modules/` 與 `.env`。看到了就是 `.gitignore` 沒設好，回覆 agent 修。
 
 > 💡 **啊哈：`"command": "npx"` 這一格，Lab 6 換成你自己寫的檔案，Lab 10 換成一個網址**
-> 這個 Lab 你是 MCP 的**消費者**；`/Users/awesomeartengineer01/Antigravity-teach/lab6/server.py` 是同一格的**提供者** —— 照 `lab6/mcp_config.sample.json` 把那格換成 `"command": "/opt/homebrew/bin/uv", "args": ["run", "--directory", "<lab6 絕對路徑>", "server.py"]` 就接上了，Antigravity 這端一個字都不用改。（uv 要寫絕對路徑、要帶 `--directory`：Antigravity 生子行程用的 PATH 與 cwd 都不是你的 shell。）
+> 這個 Lab 你是 MCP 的**消費者**；`$COURSE/lab6/server.py` 是同一格的**提供者** —— 照 `lab6/mcp_config.sample.json` 把那格換成 `"command": "/opt/homebrew/bin/uv", "args": ["run", "--directory", "<lab6 絕對路徑>", "server.py"]` 就接上了，Antigravity 這端一個字都不用改。（uv 要寫絕對路徑、要帶 `--directory`：Antigravity 生子行程用的 PATH 與 cwd 都不是你的 shell。）
 > Lab 10 把同一支檔案推上 Cloud Run，這格變成 `"serverUrl"` —— 服務是私有的，所以填 `gcloud run services proxy` 開在本機的 `http://localhost:3000/mcp`，不是 `run.app` 網址本身。這條線後面還會長：MCP tool（Lab 6）→ ADK tool（Lab 7 的 `McpToolset`）→ A2A skill（Lab 9 agent card 的 `skills`），同一個「工具」概念換三種包裝。
-> **動手看**：`grep -n "MCP_TRANSPORT\|mcp = MCPServer" /Users/awesomeartengineer01/Antigravity-teach/lab6/server.py` → 三行，同一支檔案既能當 stdio 子行程、也能綁 `$PORT` 當 HTTP 服務
+> **動手看**：`grep -n "MCP_TRANSPORT\|mcp = MCPServer" $COURSE/lab6/server.py` → 三行，同一支檔案既能當 stdio 子行程、也能綁 `$PORT` 當 HTTP 服務
 
 ---
 
@@ -466,7 +466,7 @@ repo 頁面上要**看不到** `node_modules/` 與 `.env`。看到了就是 `.gi
 ```bash
 cd 你的專案
 npm run lint && npx tsc --noEmit
-uv run /Users/awesomeartengineer01/Antigravity-teach/lab3/check_lab3.py .
+uv run $COURSE/lab3/check_lab3.py .
 echo "exit=$?"
 ```
 
@@ -524,7 +524,7 @@ exit=0
 
 ## 完整解答
 
-本目錄（`/Users/awesomeartengineer01/Antigravity-teach/lab3/`）：
+本目錄（`$COURSE/lab3/`）：
 
 | 檔案 | 用途 |
 |---|---|
@@ -537,7 +537,7 @@ exit=0
 一行複製全部：
 
 ```bash
-cp -R /Users/awesomeartengineer01/Antigravity-teach/lab3/templates/. 你的專案/
+cp -R $COURSE/lab3/templates/. 你的專案/
 ```
 
 誠實分界線：
